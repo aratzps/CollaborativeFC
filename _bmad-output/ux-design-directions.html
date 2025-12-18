@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollaborativeFC - Design Directions Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0F1113;
+            --bg-card: #1A1A1B;
+            --accent-primary: #3B82F6;
+            --accent-amethyst: #A855F7;
+            --accent-emerald: #10B981;
+            --accent-orange: #F97316;
+            --text-main: #E2E8F0;
+            --text-dim: #94A3B8;
+            --border: #2D2D2E;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #1A1A1B 0%, #0F1113 100%);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        h1 { font-family: 'Outfit', sans-serif; color: white; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-dim); font-size: 1.1rem; }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .preview {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dir-1 .preview { background: linear-gradient(rgba(15,17,19,0.7), rgba(15,17,19,0.7)), url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80'); }
+        .dir-2 .preview { background: linear-gradient(rgba(15,17,19,0.7), rgba(15,17,19,0.7)), url('https://images.unsplash.com/photo-1551288049-bbb65181ef9b?auto=format&fit=crop&w=800&q=80'); }
+        .dir-3 .preview { background: linear-gradient(rgba(15,17,19,0.7), rgba(15,17,19,0.7)), url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'); }
+        .dir-4 .preview { background: linear-gradient(rgba(15,17,19,0.7), rgba(15,17,19,0.7)), url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=80'); }
+
+        .overlay-demo {
+            border: 2px solid var(--accent-orange);
+            background: rgba(249, 115, 22, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-orange);
+            backdrop-filter: blur(4px);
+        }
+
+        .card-content { padding: 1.5rem; }
+        h3 { margin-top: 0; font-family: 'Outfit', sans-serif; }
+        p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            background: #2D2D2E;
+        }
+
+        .selected { border: 2px solid var(--accent-emerald) !important; position: relative; }
+        .selected::after {
+            content: "CHOSEN DIRECTION";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-emerald);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .token-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .token {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CollaborativeFC Design Directions</h1>
+        <p class="subtitle">Exploring "Connected Confidence" for Distributed CAD</p>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Direction 1 -->
+            <div class="card dir-1">
+                <div class="preview">
+                    <div class="overlay-demo">SURGICAL OVERLAY: CONFLICT DETECTED [Property: Radius]</div>
+                </div>
+                <div class="card-content">
+                    <span class="tag">HUD</span> <span class="tag">Transparent</span>
+                    <h3>The X-Ray HUD</h3>
+                    <p>Floating glassmorphic overlays directly in the 3D viewport. Focuses on the immediate geometric delta and minimal UI chrome. High-tech, futuristic feel.</p>
+                </div>
+            </div>
+
+            <!-- Direction 2 -->
+            <div class="card dir-2 selected">
+                <div class="preview">
+                    <div style="width: 200px; height: 100%; border-right: 2px solid var(--accent-primary); background: rgba(59,130,246,0.1); padding: 10px;">
+                        <div style="color: var(--accent-primary); font-family: 'JetBrains Mono'; font-size: 10px;">SOCIAL HUB v1.0</div>
+                        <div class="token" style="background: var(--accent-amethyst); margin-top: 20px;"></div>
+                        <div class="token" style="background: var(--accent-emerald); margin-top: 10px;"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <span class="tag">SIDEBAR</span> <span class="tag">Persistent</span>
+                    <h3>The Command Console</h3>
+                    <p>A stable, high-density control center on the right. Houses peer presence, mutation history, and sync status. Perfect for power users managing complex data.</p>
+                </div>
+            </div>
+
+            <!-- Direction 3 -->
+            <div class="card dir-3">
+                <div class="preview">
+                    <ul style="list-style: none; padding: 0; color: var(--text-dim); font-size: 12px;">
+                        <li style="padding: 10px; border-left: 4px solid var(--accent-amethyst); background: rgba(168,85,247,0.1);">[Sarah] Extrude_001 <span style="font-size: 8px; opacity:0.6;">(EDITING)</span></li>
+                        <li style="padding: 10px;">Pocket_002</li>
+                        <li style="padding: 10px; border-left: 4px solid var(--accent-primary);">[You] Mirror_001</li>
+                    </ul>
+                </div>
+                <div class="card-content">
+                    <span class="tag">TREE-CENTRIC</span> <span class="tag">Glints</span>
+                    <h3>The Integrated Pulse</h3>
+                    <p>Focuses awareness directly in the Feature Tree. Uses "Glint" animations and inline annotations to show exactly where the team is working.</p>
+                </div>
+            </div>
+
+            <!-- Direction 4 -->
+            <div class="card dir-4">
+                <div class="preview">
+                    <div style="width: 100px; height: 100px; background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; transform: rotate(15deg);">
+                        PEER GHOST
+                    </div>
+                </div>
+                <div class="card-content">
+                    <span class="tag">VIEWPORT-FIRST</span> <span class="tag">Spatial</span>
+                    <h3>The Ghost Protocol</h3>
+                    <p>Minimal UI. All conflicts and peer actions are represented as interactive 3D markers and ghosted geometry directly on the part. Zero distraction.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+            <h3>Visual Foundation Check</h3>
+            <div class="token-row">
+                <div class="token" style="background: var(--accent-amethyst);"></div>
+                <div class="token" style="background: var(--accent-emerald);"></div>
+                <div class="token" style="background: var(--accent-primary);"></div>
+                <div class="token" style="background: var(--accent-orange);"></div>
+                <div class="token" style="background: var(--accent-deep);"></div>
+            </div>
+            <p style="margin-top: 1rem;">Primary Font: <strong>Outfit</strong> (Headings) + <strong>Inter</strong> (Body) + <strong>JetBrains Mono</strong> (Data)</p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+# generated: 2025-12-18
+# project: CollaborativeFC
+# project_key: CollaborativeFC
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2025-12-18
+project: CollaborativeFC
+project_key: CollaborativeFC
+tracking_system: file-system
+story_location: "_bmad-output/implementation-artifacts"
+
+development_status:
+  # Epic 1: Workspace Initialization & Peer Presence
+  epic-1: in-progress
+  1-1-core-workbench-sidecar-lifecycle: review
+  1-2-peer-identity-social-pulse-sidebar-ui: backlog
+  1-3-feature-tree-glints-ownership-awareness: backlog
+  1-4-protocol-version-verification-lock: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Distributed Mutation Sync & Ledger
+  epic-2: backlog
+  2-1-encrypted-local-mutation-ledger-dml: backlog
+  2-2-wamp-property-sync-dispatch: backlog
+  2-3-divergence-detection-fail-to-read-only-gate: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Headless Recompute & Geometric Parity
+  epic-3: backlog
+  3-1-headless-recompute-service-sidecar: backlog
+  3-2-geometric-hash-validation-sha-256: backlog
+  3-3-topological-naming-break-detection: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: The Surgical Suite (Conflict Resolution)
+  epic-4: backlog
+  4-1-surgical-suite-hud-webview2-transparent-overlay: backlog
+  4-2-3d-ghosting-mutation-scrubbing: backlog
+  4-3-interactive-geometric-handshake-accept-reject: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Offline Lifecycle & Drift Management
+  epic-5: backlog
+  5-1-offline-editing-local-ledger-buffering: backlog
+  5-2-mutation-fuel-gauge-drift-monitoring: backlog
+  5-3-drift-lockdown-native-warning: backlog
+  5-4-emergency-static-snapshot-export: backlog
+  epic-5-retrospective: optional

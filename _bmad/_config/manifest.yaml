@@ -1,0 +1,12 @@
+installation:
+  version: 6.0.0-alpha.19
+  installDate: 2025-12-18T14:36:48.149Z
+  lastUpdated: 2025-12-18T14:36:48.149Z
+modules:
+  - core
+  - bmb
+  - bmm
+ides:
+  - antigravity
+  - gemini
+  - kilo

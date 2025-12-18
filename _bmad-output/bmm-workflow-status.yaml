@@ -1,0 +1,93 @@
+# BMM Workflow Status - CollaborativeFC
+project_name: "CollaborativeFC"
+track: "enterprise-bmad-method"
+field_type: "brownfield"
+status: "in_progress"
+generated_date: "2025-12-18"
+
+phases:
+  - name: "Prerequisites"
+    workflows:
+      - id: "document-project"
+        name: "Document Project"
+        agent: "analyst"
+        status: "completed"
+        required: true
+        purpose: "Understand existing codebase before planning new features"
+
+  - name: "Discovery"
+    workflows:
+      - id: "brainstorm-project"
+        name: "Brainstorm"
+        agent: "analyst"
+        status: "completed"
+        required: true
+      - id: "research"
+        name: "Research"
+        agent: "analyst"
+        status: "ready"
+        required: true
+      - id: "product-brief"
+        name: "Product Brief"
+        agent: "analyst"
+        status: "completed"
+        output: "c:\\Users\\aratz\\Documents\\DEV\\CollaborativeFC\\_bmad-output\\analysis\\product-brief-CollaborativeFC-2025-12-18.md"
+        required: true
+
+  - name: "Planning"
+    workflows:
+      - id: "prd"
+        name: "PRD Alignment"
+        agent: "pm"
+        status: "completed"
+        output: "c:\Users\aratz\Documents\DEV\CollaborativeFC\_bmad-output\prd.md"
+        required: true
+        note: "Align existing PRD v2.0 with BMM standards and discovery findings"
+      - id: "create-ux-design"
+        name: "UX Design"
+        agent: "ux-designer"
+        status: "completed"
+        output: "_bmad-output/ux-design-specification.md"
+        last_updated: "2025-12-18T10:17:00-08:00"
+        required: true
+
+  - name: "Solutioning"
+    workflows:
+      - id: "create-architecture"
+        name: "Create Architecture"
+        agent: "architect"
+        status: "completed"
+        output: "_bmad-output/architecture.md"
+        last_updated: "2025-12-18T10:27:00-08:00"
+        required: true
+      - id: "create-epics-and-stories"
+        name: "Create Epics & Stories"
+        agent: "pm"
+        status: "completed"
+        output: "_bmad-output/epics.md"
+        last_updated: "2025-12-18T11:03:00-08:00"
+        required: true
+      - id: "test-design"
+        name: "Test Design"
+        agent: "tea"
+        status: "completed"
+        output: "_bmad-output/test-design-system.md"
+        last_updated: "2025-12-18T14:48:00-08:00"
+        required: true
+      - id: "implementation-readiness"
+        name: "Implementation Readiness"
+        agent: "architect"
+        status: "completed"
+        output: "_bmad-output/implementation-readiness-report-2025-12-18.md"
+        last_updated: "2025-12-18T14:52:00-08:00"
+        required: true
+
+  - name: "Implementation"
+    workflows:
+      - id: "sprint-planning"
+        name: "Sprint Planning"
+        agent: "sm"
+        status: "completed"
+        output: "_bmad-output/implementation-artifacts/sprint-status.yaml"
+        last_updated: "2025-12-18T14:55:00-08:00"
+        required: true
