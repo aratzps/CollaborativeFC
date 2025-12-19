@@ -415,20 +415,21 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
                         # Recompute immediately to validate geometry
                         doc.recompute()
                         
-                        # Divergence Check (Story 2.3)
+                        # Divergence Check (Story 3.2: SHA256)
                         incoming_hash = m.get("geometric_hash")
                         if incoming_hash and incoming_hash != "dummy_hash":
-                            # For Story 2.3, we simulate hash generation
-                            # In Epic 3, this will call a real T_BREP hash function
-                            local_hash = "mismatch_simulated" # Force fail for testing if needed
+                            # Calculate Local Hash (Same algo as Sidecar)
+                            import hashlib
+                            shape = obj.Shape
+                            sig = f"{shape.Volume:.6f}|{shape.Area:.6f}|{len(shape.Vertexes)}|{len(shape.Edges)}|{len(shape.Faces)}"
+                            local_hash = hashlib.sha256(sig.encode()).hexdigest()
                             
-                            # Real simulation: if incoming is 'valid_hash' and we produced 'valid_hash' it passes.
-                            # Let's say we expect incoming_hash to match a simple string of value for now?
-                            # No, let's look for a specific flag "FORCE_DIVERGENCE"
-                            
-                            if incoming_hash == "FORCE_DIVERGENCE":
+                            # Real Validation
+                            if incoming_hash == "FORCE_DIVERGENCE" or incoming_hash != local_hash:
                                 FreeCAD.Console.PrintError(f"   [DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}\n")
-                                self._trigger_safety_lock("Geometric Divergence Detected")
+                                self._trigger_safety_lock(f"Geometric Divergence Detected\nremote: {incoming_hash[:6]}...\nlocal: {local_hash[:6]}...")
+                            else:
+                                FreeCAD.Console.PrintMessage(f"   [MATCH] Geometric Parity Confirmed ({local_hash[:6]}...)\n")
                             
                     except Exception as e:
                          FreeCAD.Console.PrintError(f"   [FAIL] {obj_name}.{prop_name}: {e}\n")
