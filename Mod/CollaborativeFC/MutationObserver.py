@@ -95,24 +95,36 @@ class MutationObserver:
         """Retrieves and decrypts the entire ledger."""
         return self.send_to_sidecar("read_ledger", {})
 
+    def poll_queue(self):
+        """Checks sidecar for incoming network mutations."""
+        return self.send_to_sidecar("poll_queue", {})
+
 class DocumentObserver:
     """Proxy observer pinned to the App using standard FreeCAD Slot names."""
     def __init__(self, manager):
         self.manager = manager
+        self.paused = False
+        
+    def pause(self): self.paused = True
+    def resume(self): self.paused = False
 
     def onChanged(self, *args):
+        if self.paused: return
         if len(args) >= 2:
             self.manager._process_change(args[-2], args[-1], "onChanged")
 
     def onAfterChange(self, *args):
+        if self.paused: return
         if len(args) >= 2:
             self.manager.onAfterChange(args[-2], args[-1])
             
     # Standard FreeCAD Slot names for Global Observers
     def slotChangedObject(self, obj, prop):
+        if self.paused: return
         self.manager._process_change(obj, prop, "slotChanged")
 
     def slotAfterChange(self, obj, prop):
+        if self.paused: return
         self.manager.onAfterChange(obj, prop)
 
     # Document Lifecycle Slots

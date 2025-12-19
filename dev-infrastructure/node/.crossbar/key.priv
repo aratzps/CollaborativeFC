@@ -1,0 +1,11 @@
+Crossbar.io node private key - KEEP THIS SAFE!
+
+creator: aratz@Prometheus
+created-at: 2025-12-19T00:48:47.491Z
+machine-id: Prometheus
+node-authid: Prometheus
+node-cluster-ip: 127.0.0.1
+public-key-ed25519: cbbecc3ffae985481181177a90c4ee1282a36f368b2793f092f3d7beae4b7ca1
+public-adr-eth: 0xB4f3cc15055963536b258122d987eD02E55AA069
+private-key-ed25519: 4309d294beca82273f4b90e36c8b3a5362fd3edb1a5b97ef8cb34a74fca86432
+private-key-eth: 7f5e4bdc7fe559408a774a2d8ef807423d7ad91adf0d2626a2a412280146cb18

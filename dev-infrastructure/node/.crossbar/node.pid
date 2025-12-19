@@ -1,0 +1,22 @@
+{
+    "pid": 30072, 
+    "argv": [
+        "C:\\Users\\aratz\\Documents\\DEV\\CollaborativeFC\\dev-infrastructure\\venv\\Scripts\\crossbar", 
+        "start", 
+        "--cbdir", 
+        ".\\dev-infrastructure\\node\\.crossbar"
+    ], 
+    "options": {
+        "debug_lifecycle": false, 
+        "debug_programflow": false, 
+        "command": "start", 
+        "color": false, 
+        "loglevel": "info", 
+        "logformat": "standard", 
+        "logdir": null, 
+        "logtofile": false, 
+        "cbdir": "C:\\Users\\aratz\\Documents\\DEV\\CollaborativeFC\\dev-infrastructure\\node\\.crossbar", 
+        "config": "config.json", 
+        "shutdownafter": null
+    }
+}

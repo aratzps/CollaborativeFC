@@ -2,6 +2,281 @@ Starting OCP Sidecar (Twisted/Autobahn)...
 IPC Listening on port 5555
 Initializing WAMP...
 Entering Main Loop...
-2025-12-18 16:40:01,972 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=57046)
-2025-12-18 16:40:01,983 - [Sidecar] IPC Data Received: 34 bytes | Total Buffer: 34 bytes
-2025-12-18 16:40:03,739 - [Sidecar] WAMP Connection Failed (Offline Mode): Connection was refused by other side: 10061: No connection could be made because the target machine actively refused it..
+2025-12-18 17:04:31,568 - [Sidecar] Joined WAMP realm 'realm1'
+2025-12-18 17:04:31,691 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=57720)
+2025-12-18 17:04:31,702 - [Sidecar] IPC Data Received: 34 bytes | Total Buffer: 34 bytes
+2025-12-18 17:04:32,681 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=50799)
+2025-12-18 17:04:32,746 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:33,054 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=50800)
+2025-12-18 17:04:33,069 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:33,571 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=50801)
+2025-12-18 17:04:33,587 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:34,078 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=50802)
+2025-12-18 17:04:34,094 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:34,573 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52198)
+2025-12-18 17:04:34,597 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:35,077 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62352)
+2025-12-18 17:04:35,093 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:35,572 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62590)
+2025-12-18 17:04:35,598 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:36,073 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62591)
+2025-12-18 17:04:36,090 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:36,583 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62592)
+2025-12-18 17:04:36,583 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:37,069 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62593)
+2025-12-18 17:04:37,085 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:37,573 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62594)
+2025-12-18 17:04:37,590 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:38,073 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62595)
+2025-12-18 17:04:38,089 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:38,573 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62596)
+2025-12-18 17:04:38,596 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:39,069 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62597)
+2025-12-18 17:04:39,085 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:39,574 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62598)
+2025-12-18 17:04:39,597 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:40,073 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62599)
+2025-12-18 17:04:40,098 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:40,583 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62600)
+2025-12-18 17:04:40,598 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:41,070 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62601)
+2025-12-18 17:04:41,086 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:41,573 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62602)
+2025-12-18 17:04:41,596 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:42,073 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62603)
+2025-12-18 17:04:42,089 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:42,574 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=62604)
+2025-12-18 17:04:42,598 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:43,097 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=56017)
+2025-12-18 17:04:43,111 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:43,592 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52969)
+2025-12-18 17:04:43,592 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:44,098 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52972)
+2025-12-18 17:04:44,115 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:44,590 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52973)
+2025-12-18 17:04:44,606 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:45,085 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52974)
+2025-12-18 17:04:45,101 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:45,590 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52975)
+2025-12-18 17:04:45,606 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:46,092 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52976)
+2025-12-18 17:04:46,105 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:46,592 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52977)
+2025-12-18 17:04:46,603 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:47,097 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52978)
+2025-12-18 17:04:47,113 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:47,594 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52979)
+2025-12-18 17:04:47,606 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:48,115 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52981)
+2025-12-18 17:04:48,115 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:48,637 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=52982)
+2025-12-18 17:04:48,656 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:49,160 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65500)
+2025-12-18 17:04:49,175 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:49,657 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65501)
+2025-12-18 17:04:49,673 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:50,157 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65502)
+2025-12-18 17:04:50,171 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:50,649 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65503)
+2025-12-18 17:04:50,651 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:51,172 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65504)
+2025-12-18 17:04:51,185 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:51,669 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65505)
+2025-12-18 17:04:51,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:52,172 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65506)
+2025-12-18 17:04:52,188 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:52,668 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65508)
+2025-12-18 17:04:52,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:53,169 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65509)
+2025-12-18 17:04:53,184 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:53,665 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65510)
+2025-12-18 17:04:53,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:54,171 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65514)
+2025-12-18 17:04:54,187 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:54,669 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65515)
+2025-12-18 17:04:54,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:55,176 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65516)
+2025-12-18 17:04:55,190 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:55,669 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65517)
+2025-12-18 17:04:55,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:55,984 - [Sidecar] Received Remote Mutation: Pad.Length
+2025-12-18 17:04:56,177 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65520)
+2025-12-18 17:04:56,194 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:57,174 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65521)
+2025-12-18 17:04:57,174 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:57,667 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65523)
+2025-12-18 17:04:57,667 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:58,173 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65525)
+2025-12-18 17:04:58,187 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:58,669 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65526)
+2025-12-18 17:04:58,682 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:59,164 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65527)
+2025-12-18 17:04:59,188 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:04:59,666 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65528)
+2025-12-18 17:04:59,676 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:00,166 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65529)
+2025-12-18 17:05:00,188 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:00,666 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65530)
+2025-12-18 17:05:00,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:01,170 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65531)
+2025-12-18 17:05:01,181 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:01,668 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65532)
+2025-12-18 17:05:01,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:02,164 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65533)
+2025-12-18 17:05:02,178 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:02,667 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=65534)
+2025-12-18 17:05:02,677 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:03,174 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49152)
+2025-12-18 17:05:03,186 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:03,683 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49153)
+2025-12-18 17:05:03,698 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:04,191 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49154)
+2025-12-18 17:05:04,192 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:04,682 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49155)
+2025-12-18 17:05:04,682 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:05,194 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49156)
+2025-12-18 17:05:05,194 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:05,684 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49157)
+2025-12-18 17:05:05,684 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:06,184 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49158)
+2025-12-18 17:05:06,198 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:06,686 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49159)
+2025-12-18 17:05:06,699 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:07,189 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49160)
+2025-12-18 17:05:07,205 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:07,681 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49161)
+2025-12-18 17:05:07,699 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:08,184 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49162)
+2025-12-18 17:05:08,198 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:08,690 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49165)
+2025-12-18 17:05:08,690 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:09,181 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49166)
+2025-12-18 17:05:09,195 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:09,683 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49168)
+2025-12-18 17:05:09,700 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:10,191 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49169)
+2025-12-18 17:05:10,207 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:10,679 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49170)
+2025-12-18 17:05:10,692 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:11,325 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49171)
+2025-12-18 17:05:11,340 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:11,686 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49172)
+2025-12-18 17:05:11,701 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:12,180 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49173)
+2025-12-18 17:05:12,181 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:12,681 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49174)
+2025-12-18 17:05:12,681 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:13,192 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49175)
+2025-12-18 17:05:13,206 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:13,690 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49176)
+2025-12-18 17:05:13,706 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:14,190 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49177)
+2025-12-18 17:05:14,207 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:14,683 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49178)
+2025-12-18 17:05:14,697 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:15,185 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49181)
+2025-12-18 17:05:15,200 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:15,685 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49182)
+2025-12-18 17:05:15,700 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:16,184 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49183)
+2025-12-18 17:05:16,195 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:16,690 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49184)
+2025-12-18 17:05:16,706 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:17,190 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49185)
+2025-12-18 17:05:17,204 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:17,686 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49186)
+2025-12-18 17:05:17,708 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:18,204 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49188)
+2025-12-18 17:05:18,214 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:18,697 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49190)
+2025-12-18 17:05:18,698 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:19,199 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49191)
+2025-12-18 17:05:19,214 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:19,695 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49192)
+2025-12-18 17:05:19,713 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:20,208 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49193)
+2025-12-18 17:05:20,224 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:20,706 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49194)
+2025-12-18 17:05:20,721 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:21,202 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49195)
+2025-12-18 17:05:21,218 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:21,696 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49196)
+2025-12-18 17:05:21,709 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:22,196 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49197)
+2025-12-18 17:05:22,209 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:22,706 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49198)
+2025-12-18 17:05:22,722 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:23,199 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49200)
+2025-12-18 17:05:23,217 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:23,696 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49201)
+2025-12-18 17:05:23,722 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:24,198 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49210)
+2025-12-18 17:05:24,210 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:24,705 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49211)
+2025-12-18 17:05:24,720 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:25,209 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49214)
+2025-12-18 17:05:25,226 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:25,715 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49215)
+2025-12-18 17:05:25,730 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:26,220 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49216)
+2025-12-18 17:05:26,236 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:26,657 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49217)
+2025-12-18 17:05:26,657 - [Sidecar] IPC Data Received: 114 bytes | Total Buffer: 114 bytes
+2025-12-18 17:05:26,658 - [Sidecar] Local Mutation Recorded: 368b8ae347ff7d7e
+2025-12-18 17:05:26,658 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:26,712 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49218)
+2025-12-18 17:05:26,724 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:26,730 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49219)
+2025-12-18 17:05:26,730 - [Sidecar] IPC Data Received: 115 bytes | Total Buffer: 115 bytes
+2025-12-18 17:05:26,731 - [Sidecar] Local Mutation Recorded: 9cc7f5a62eba964a
+2025-12-18 17:05:26,731 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,223 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49221)
+2025-12-18 17:05:27,247 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:27,717 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49222)
+2025-12-18 17:05:27,727 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:27,730 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49223)
+2025-12-18 17:05:27,730 - [Sidecar] IPC Data Received: 154 bytes | Total Buffer: 154 bytes
+2025-12-18 17:05:27,731 - [Sidecar] Local Mutation Recorded: 516dae79a8504ba6
+2025-12-18 17:05:27,731 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,733 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49224)
+2025-12-18 17:05:27,747 - [Sidecar] IPC Data Received: 161 bytes | Total Buffer: 161 bytes
+2025-12-18 17:05:27,747 - [Sidecar] Local Mutation Recorded: 385c52a0e25c5126
+2025-12-18 17:05:27,747 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,749 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49225)
+2025-12-18 17:05:27,762 - [Sidecar] IPC Data Received: 136 bytes | Total Buffer: 136 bytes
+2025-12-18 17:05:27,764 - [Sidecar] Local Mutation Recorded: d715cf1e88210d6d
+2025-12-18 17:05:27,764 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,764 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49226)
+2025-12-18 17:05:27,779 - [Sidecar] IPC Data Received: 136 bytes | Total Buffer: 136 bytes
+2025-12-18 17:05:27,779 - [Sidecar] Local Mutation Recorded: 8d50bd0eb5ebdfa3
+2025-12-18 17:05:27,779 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,784 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49227)
+2025-12-18 17:05:27,810 - [Sidecar] IPC Data Received: 150 bytes | Total Buffer: 150 bytes
+2025-12-18 17:05:27,811 - [Sidecar] Local Mutation Recorded: 2ca9aa418e6a97e0
+2025-12-18 17:05:27,811 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,813 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49228)
+2025-12-18 17:05:27,813 - [Sidecar] IPC Data Received: 144 bytes | Total Buffer: 144 bytes
+2025-12-18 17:05:27,814 - [Sidecar] Local Mutation Recorded: f40960446bcf84c1
+2025-12-18 17:05:27,814 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,817 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49229)
+2025-12-18 17:05:27,817 - [Sidecar] IPC Data Received: 148 bytes | Total Buffer: 148 bytes
+2025-12-18 17:05:27,818 - [Sidecar] Local Mutation Recorded: c3c66d2d072a5c43
+2025-12-18 17:05:27,819 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,821 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49230)
+2025-12-18 17:05:27,821 - [Sidecar] IPC Data Received: 127 bytes | Total Buffer: 127 bytes
+2025-12-18 17:05:27,822 - [Sidecar] Local Mutation Recorded: 6da262644955fb4f
+2025-12-18 17:05:27,822 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:27,824 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49231)
+2025-12-18 17:05:27,839 - [Sidecar] IPC Data Received: 148 bytes | Total Buffer: 148 bytes
+2025-12-18 17:05:27,840 - [Sidecar] Local Mutation Recorded: 5bebd5b0d00d4527
+2025-12-18 17:05:27,840 - [Sidecar] Mutation Failed: cannot import name 'PublishOptions' from 'autobahn.twisted.wamp' (C:\Users\aratz\AppData\Roaming\Python\Python311\site-packages\autobahn\twisted\wamp.py)
+2025-12-18 17:05:28,217 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49232)
+2025-12-18 17:05:28,233 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:28,714 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49233)
+2025-12-18 17:05:28,739 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:29,217 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=49234)
+2025-12-18 17:05:29,227 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:29,722 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=54693)
+2025-12-18 17:05:29,737 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes
+2025-12-18 17:05:30,211 - [Sidecar] IPC Client Connected: IPv4Address(type='TCP', host='127.0.0.1', port=54694)
+2025-12-18 17:05:30,236 - [Sidecar] IPC Data Received: 40 bytes | Total Buffer: 40 bytes

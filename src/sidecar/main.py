@@ -15,6 +15,7 @@ LEDGER_SECRET = "collaborative-fc-synergy-2025"
 # Global State
 _wamp_session = None
 _ledger = LedgerManager(secret_key=LEDGER_SECRET)
+_incoming_queue = []
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [Sidecar] %(message)s')
 
@@ -28,8 +29,15 @@ class CollaborativeSession(ApplicationSession):
         self.subscribe(self.on_remote_mutation, "ocp.update.property")
 
     def on_remote_mutation(self, payload):
+        global _incoming_queue
+        # Loopback Protection: Don't process our own broadcast
+        # Ideally check session ID, but for now check payload['author'] vs our local author?
+        # Actually, the workbench handles author ID. Sidecar doesn't know "who am I" yet.
+        # So we just queue everything, and let Workbench discard its own if needed.
+        # WAIT: Crossbar reflects publishing to subscriber by default unless exclude_me=True.
+        
         logging.info(f"Received Remote Mutation: {payload.get('object')}.{payload.get('property')}")
-        # TODO: Store in 'incoming queue' for FreeCAD to poll (Story 2.3)
+        _incoming_queue.append(payload)
 
     def onDisconnect(self):
         global _wamp_session
@@ -76,7 +84,8 @@ class WorkbenchIPC(protocol.Protocol):
                 
                 # 2. Broadcast via WAMP
                 if _wamp_session:
-                    _wamp_session.publish("ocp.update.property", payload)
+                    from autobahn.twisted.wamp import PublishOptions
+                    _wamp_session.publish("ocp.update.property", payload, options=PublishOptions(exclude_me=True))
                     logging.info(f"Broadcasted Mutation: {mid}")
                 else:
                     logging.warning("WAMP Offline - Sync Queued (Not implemented)")
@@ -90,7 +99,14 @@ class WorkbenchIPC(protocol.Protocol):
             data = _ledger.read_all_mutations()
             self.transport.write(json.dumps(data).encode())
             
-        elif cmd == "ping":
+        elif cmd == "poll_queue":
+            # Return and clear incoming queue
+            global _incoming_queue
+            snapshot = list(_incoming_queue)
+            _incoming_queue.clear()
+            self.transport.write(json.dumps(snapshot).encode())
+
+        if cmd == "ping":
             wamp_status = "connected" if _wamp_session else "offline"
             resp = json.dumps({"status": "pong", "wamp": wamp_status}).encode()
             self.transport.write(resp)

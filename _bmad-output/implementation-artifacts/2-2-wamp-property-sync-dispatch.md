@@ -17,8 +17,15 @@ So that we can work concurrently on the same assembly with minimal latency.
 - [ ] **And** the Sidecar must include the `geometric_hash` in the payload for immediate verification (FR4)
 
 ## Implementation Notes
-- Use `autobahn` or similar WAMP client library for Python.
-- Connect to a public or local WAMP router (configurable, default: `ws://localhost:8080/ws`, Realm: `realm1`).
-- The Sidecar already receives mutations via IPC.
-- We need to add the WAMP Component lifecycle to `sidecar/main.py`.
-- We need to implement `geometric_hash` generation (using SHA-256 of the value for now, or true geometry if possible, but the story mentions it specifically). Note: Story 3.2 covers full Geometric Hash Validation. For 2.2, we might just include a placeholder or basic hash.
+- **Sidecar Client (DONE):**
+    - Refactored to use `Twisted` reactor and `autobahn` WAMP client.
+    - Implemented robust IPC protocol with logic to handle fragmentation and one-shot requests.
+    - Added "Offline Mode" resilience (Sidecar runs IPC even if WAMP connection fails).
+- **WAMP Router (TODO):**
+    - Need to set up a WAMP router (Crossbar.io or basic Twisted router).
+    - Current state: Sidecar searches for `ws://localhost:8080/ws`.
+    - Next steps: Install/Run router and verify broadcast.
+- **Verification:**
+    - [x] Handshake between Workbench and Sidecar (IPC Pong).
+    - [x] Sidecar attempts WAMP connection (Log: "WAMP Connection Failed").
+    - [ ] Real-time mutation broadcast seen in router logs.
