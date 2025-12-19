@@ -45,6 +45,13 @@ class MutationObserver:
         self._process_change(obj, prop, "AfterChange")
 
     def _process_change(self, obj, prop, source):
+        # 0. Safety Lock Check
+        try:
+            import LockManager
+            if LockManager.LockManager.get_instance().check_lock():
+                return
+        except: pass
+
         # We avoid recording internal FreeCAD UI properties
         if prop in ["Proxy", "Visibility", "ViewObject", "Label", "ExpressionEngine"]:
             return
@@ -80,6 +87,11 @@ class MutationObserver:
     def onSaved(self, obj_name):
         """Triggered when the document is saved."""
         try:
+            import LockManager
+            if LockManager.LockManager.get_instance().check_lock():
+                FreeCAD.Console.PrintWarning(f"[CollaborativeFC] Save Commit Blocked (Locked)\n")
+                return
+
             payload = {
                 "author": self.author_id,
                 "object": obj_name,
