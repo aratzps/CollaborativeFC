@@ -1,5 +1,9 @@
-autobahn==23.6.2
-twisted==23.5.0
-crossbar==22.6.1
+autobahn>=23.6.2
+twisted
+crossbar
 # PySide2 is embedded in FreeCAD, but included here for development/linting
-pyside2==5.15.2.1
+# pyside2==5.15.2.1
+
+# UI / Sidecar Integration
+pywebview
+pythonnet

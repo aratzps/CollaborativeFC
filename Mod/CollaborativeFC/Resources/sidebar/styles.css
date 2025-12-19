@@ -1,0 +1,251 @@
+:root {
+    --bg-color: #1A1A1B;
+    --header-bg: #0F1113;
+    --text-primary: #E2E8F0;
+    --text-secondary: #94A3B8;
+    --peer-amethyst: #A855F7;
+    --peer-emerald: #10B981;
+    --peer-sapphire: #3B82F6;
+    --status-online: #84CC16;
+    --status-warning: #F97316;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+header {
+    background-color: var(--header-bg);
+    padding: 16px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#connection-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.online {
+    background-color: var(--status-online);
+    box-shadow: 0 0 8px var(--status-online);
+}
+
+.status-text {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+main {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.peer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.peer-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.peer-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.avatar-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    background-color: var(--peer-color, var(--peer-amethyst));
+    border-radius: 50%;
+    border: 2px solid var(--bg-color);
+    z-index: 2;
+    position: relative;
+}
+
+.avatar.circle {
+    border-radius: 50%;
+}
+
+.avatar.square {
+    border-radius: 4px;
+}
+
+.avatar.triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--peer-color, var(--peer-amethyst));
+    border-radius: inherit;
+    opacity: 0.4;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    z-index: 1;
+}
+
+@keyframes ping {
+
+    75%,
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+.peer-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.peer-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.peer-action {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+footer {
+    padding: 16px;
+    border-top: 1px solid #333;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+#invite-btn {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--peer-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+#invite-btn:hover {
+    background-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Version Mismatch States */
+.pulse.error {
+    background: #EF4444;
+    box-shadow: 0 0 8px #EF4444;
+}
+
+.status-error {
+    color: #EF4444 !important;
+    font-weight: bold;
+}
+
+.mismatch {
+    background: rgba(239, 68, 68, 0.05);
+    border-left: 3px solid #EF4444 !important;
+}
+
+/* Sidebar Lockdown Overlay */
+#lock-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    pointer-events: all;
+}
+
+.lock-content {
+    text-align: center;
+}
+
+.lock-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.lock-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #EF4444;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.session-locked {
+    overflow: hidden;
+    pointer-events: none;
+}

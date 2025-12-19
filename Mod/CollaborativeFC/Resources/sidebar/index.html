@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Pulse</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>Social Pulse</h1>
+            <div id="connection-status">
+                <span class="status-dot online"></span>
+                <span class="status-text">Synergy Active</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="peer-list" id="peer-list">
+                <!-- Peer items will be injected here -->
+                <div class="peer-item">
+                    <div class="avatar-container" style="--peer-color: #A855F7;">
+                        <div class="avatar circle"></div>
+                        <div class="pulse"></div>
+                    </div>
+                    <div class="peer-info">
+                        <span class="peer-name">Sarah</span>
+                        <span class="peer-action">Editing BasePlate</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <button id="invite-btn">Invite Peer</button>
+        </footer>
+    </div>
+    <script src="logic.js"></script>
+</body>
+
+</html>
