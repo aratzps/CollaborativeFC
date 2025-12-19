@@ -410,10 +410,19 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
                         FreeCAD.Console.PrintMessage(f"   [APPLY] {obj_name}.{prop_name} = {value}\n")
                         
                         # Apply the change
+                        # Capture Pre-Topology
+                        pre_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
+
                         setattr(obj, prop_name, value)
                         
                         # Recompute immediately to validate geometry
                         doc.recompute()
+                        
+                        # Capture Post-Topology
+                        post_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
+                        
+                        if pre_topo and post_topo and pre_topo != post_topo:
+                             FreeCAD.Console.PrintWarning(f"   [WARNING] Topology Changed: {pre_topo} -> {post_topo}. References may break!\n")
                         
                         # Divergence Check (Story 3.2: SHA256)
                         incoming_hash = m.get("geometric_hash")

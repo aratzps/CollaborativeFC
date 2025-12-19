@@ -59,7 +59,7 @@ development_status:
   epic-3: in-progress
   3-1-headless-recompute-service-sidecar: done
   3-2-geometric-hash-validation-sha-256: done
-  3-3-topological-naming-break-detection: in-progress
+  3-3-topological-naming-break-detection: done
   epic-3-retrospective: optional
   epic-3-retrospective: optional
 

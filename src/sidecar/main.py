@@ -64,14 +64,30 @@ def _replay_on_shadow(doc, payload):
                 obj = doc.addObject("Part::Box", obj_name)
         
         if obj:
+            # Capture Pre-Mutation Topology
+            pre_topology = "N/A"
+            if hasattr(obj, "Shape") and not obj.Shape.isNull():
+                pre_topology = (len(obj.Shape.Faces), len(obj.Shape.Edges))
+
             val = float(val_str) if str(val_str).replace('.','',1).isdigit() else val_str
             try:
                 setattr(obj, prop_name, val)
                 doc.recompute()
                 
+                # Capture Post-Mutation Topology
+                post_topology = "N/A"
+                if hasattr(obj, "Shape") and not obj.Shape.isNull():
+                    post_topology = (len(obj.Shape.Faces), len(obj.Shape.Edges))
+                
+                # Detect Clean vs Broken Topology
+                topo_status = "STABLE"
+                if pre_topology != "N/A" and post_topology != "N/A":
+                    if pre_topology != post_topology:
+                        topo_status = f"UNSTABLE ({pre_topology} -> {post_topology})"
+                        logging.warning(f"[TOPOLOGY BREAK] Shape Changed: {topo_status}")
+
                 # Calculate Local Hash
                 local_hash = calculate_geometric_hash(obj)
-                
                 
                 # Validation
                 status = "MATCH"
@@ -80,7 +96,8 @@ def _replay_on_shadow(doc, payload):
                          status = "DIVERGENCE"
                          logging.warning(f"[DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}")
                 
-                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | Hash={local_hash[:8]}... [{status}]")
+                 # Log both Hash Status and Topology Status
+                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | Hash={local_hash[:8]}... [{status}] | Topo={topo_status}")
                 
             except AttributeError:
                 pass # Ignore non-Box props
