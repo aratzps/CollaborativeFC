@@ -58,8 +58,8 @@ development_status:
   # Epic 3: Headless Recompute & Geometric Parity
   epic-3: in-progress
   3-1-headless-recompute-service-sidecar: done
-  3-2-geometric-hash-validation-sha-256: in-progress
-  3-3-topological-naming-break-detection: backlog
+  3-2-geometric-hash-validation-sha-256: done
+  3-3-topological-naming-break-detection: in-progress
   epic-3-retrospective: optional
   epic-3-retrospective: optional
 

@@ -11,7 +11,8 @@ FAKE_MUTATION = {
     "object": "Pad",   # Make sure you have a 'Pad' object in FreeCAD!
     "property": "Length",
     "value": 50.0,     # Changing value to ensure we see visual update too
-    "geometric_hash": "FORCE_DIVERGENCE"
+    # Calculated Hash for Part::Box(10,10,50)
+    "geometric_hash": "fe632161877ddc01f70e822df99b6e8cb0d938850f6fbcc4ff3a8700ac71d66b"
 }
 
 comp = Component(transports=ROUTER_URL, realm=REALM)

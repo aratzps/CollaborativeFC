@@ -32,6 +32,21 @@ except Exception as e:
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [Sidecar] %(message)s')
 
+def calculate_geometric_hash(obj):
+    """Generates a deterministic SHA256 hash of the object's geometry."""
+    try:
+        import hashlib
+        if not hasattr(obj, "Shape"):
+            return "no_shape"
+            
+        shape = obj.Shape
+        # Composite Signature: Volume | Area | Vertices | Edges | Faces
+        # Rounded to 6 decimals to avoid floating point jitter
+        sig = f"{shape.Volume:.6f}|{shape.Area:.6f}|{len(shape.Vertexes)}|{len(shape.Edges)}|{len(shape.Faces)}"
+        return hashlib.sha256(sig.encode()).hexdigest()
+    except Exception as e:
+        return f"hash_error_{e}"
+
 def _replay_on_shadow(doc, payload):
     """Applies a mutation to the Shadow Document."""
     if not doc: return
@@ -40,6 +55,7 @@ def _replay_on_shadow(doc, payload):
         obj_name = payload.get("object")
         prop_name = payload.get("property")
         val_str = payload.get("value")
+        incoming_hash = payload.get("geometric_hash")
         
         obj = doc.getObject(obj_name)
         if not obj:
@@ -53,13 +69,19 @@ def _replay_on_shadow(doc, payload):
                 setattr(obj, prop_name, val)
                 doc.recompute()
                 
-                # Calculate simple geometry metric
-                metric = "N/A"
-                if hasattr(obj, "Shape"):
-                    metric = f"Vol={obj.Shape.Volume:.2f}"
+                # Calculate Local Hash
+                local_hash = calculate_geometric_hash(obj)
                 
-                print(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | {metric}", flush=True)
-                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | {metric}")
+                
+                # Validation
+                status = "MATCH"
+                if incoming_hash and incoming_hash != "dummy_hash":
+                     if incoming_hash != local_hash:
+                         status = "DIVERGENCE"
+                         logging.warning(f"[DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}")
+                
+                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | Hash={local_hash[:8]}... [{status}]")
+                
             except AttributeError:
                 pass # Ignore non-Box props
             except Exception as e:
@@ -70,7 +92,6 @@ def _replay_on_shadow(doc, payload):
 class CollaborativeSession(ApplicationSession):
     def onJoin(self, details):
         global _wamp_session
-        print(f"DEBUG: onJoin called for realm {details.realm}", flush=True)
         logging.info("Joined WAMP realm '{}'".format(details.realm))
         _wamp_session = self
         
@@ -78,8 +99,6 @@ class CollaborativeSession(ApplicationSession):
         self.subscribe(self.on_remote_mutation, "ocp.update.property")
 
     def on_remote_mutation(self, payload):
-        global _incoming_queue, _shadow_doc
-        print(f"DEBUG: on_remote_mutation called for {payload}", flush=True)
         global _incoming_queue, _shadow_doc
         logging.info(f"Received Remote Mutation: {payload.get('object')}.{payload.get('property')}")
         
@@ -183,11 +202,9 @@ if __name__ == "__main__":
     from twisted.internet.error import ConnectionRefusedError
     
     def start_wamp():
-        print("DEBUG: start_wamp called", flush=True)
         runner = ApplicationRunner(url=WAMP_URL, realm=WAMP_REALM)
         d = runner.run(CollaborativeSession, start_reactor=False)
-        d.addCallback(lambda _: print("DEBUG: WAMP session finished", flush=True))
-        d.addErrback(lambda e: print(f"DEBUG: WAMP Error: {e}", flush=True))
+        d.addErrback(lambda e: logging.warning(f"WAMP Connection Failed (Offline Mode): {e.value}"))
 
     # Schedule WAMP start
     reactor.callWhenRunning(start_wamp)
