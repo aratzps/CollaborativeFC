@@ -17,11 +17,60 @@ _wamp_session = None
 _ledger = LedgerManager(secret_key=LEDGER_SECRET)
 _incoming_queue = []
 
+# Initialize Headless FreeCAD Engine (Story 3.1)
+try:
+    # Ensure bin path is in sys.path (critical for finding mod libraries)
+    fc_bin = os.path.dirname(sys.executable)
+    if fc_bin not in sys.path: sys.path.append(fc_bin)
+    
+    import FreeCAD
+    _shadow_doc = FreeCAD.newDocument("CollaborativeShadow")
+    logging.info("Headless FreeCAD Engine Initialized. Shadow Document Ready.")
+except Exception as e:
+    logging.error(f"Failed to init FreeCAD Headless: {e}")
+    _shadow_doc = None
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [Sidecar] %(message)s')
+
+def _replay_on_shadow(doc, payload):
+    """Applies a mutation to the Shadow Document."""
+    if not doc: return
+
+    try:
+        obj_name = payload.get("object")
+        prop_name = payload.get("property")
+        val_str = payload.get("value")
+        
+        obj = doc.getObject(obj_name)
+        if not obj:
+            # Auto-create for testing (Simulate 'Creation' event logic)
+            if prop_name == "Length": # Hint it's a Pad or Box
+                obj = doc.addObject("Part::Box", obj_name)
+        
+        if obj:
+            val = float(val_str) if str(val_str).replace('.','',1).isdigit() else val_str
+            try:
+                setattr(obj, prop_name, val)
+                doc.recompute()
+                
+                # Calculate simple geometry metric
+                metric = "N/A"
+                if hasattr(obj, "Shape"):
+                    metric = f"Vol={obj.Shape.Volume:.2f}"
+                
+                print(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | {metric}", flush=True)
+                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | {metric}")
+            except AttributeError:
+                pass # Ignore non-Box props
+            except Exception as e:
+                logging.error(f"Shadow Replay Error ({prop_name}): {e}")
+    except Exception as e:
+        logging.error(f"Shadow Logic Crash: {e}")
 
 class CollaborativeSession(ApplicationSession):
     def onJoin(self, details):
         global _wamp_session
+        print(f"DEBUG: onJoin called for realm {details.realm}", flush=True)
         logging.info("Joined WAMP realm '{}'".format(details.realm))
         _wamp_session = self
         
@@ -29,49 +78,41 @@ class CollaborativeSession(ApplicationSession):
         self.subscribe(self.on_remote_mutation, "ocp.update.property")
 
     def on_remote_mutation(self, payload):
-        global _incoming_queue
-        # Loopback Protection: Don't process our own broadcast
-        # Ideally check session ID, but for now check payload['author'] vs our local author?
-        # Actually, the workbench handles author ID. Sidecar doesn't know "who am I" yet.
-        # So we just queue everything, and let Workbench discard its own if needed.
-        # WAIT: Crossbar reflects publishing to subscriber by default unless exclude_me=True.
-        
+        global _incoming_queue, _shadow_doc
+        print(f"DEBUG: on_remote_mutation called for {payload}", flush=True)
+        global _incoming_queue, _shadow_doc
         logging.info(f"Received Remote Mutation: {payload.get('object')}.{payload.get('property')}")
+        
+        # Replay on Shadow Doc
+        _replay_on_shadow(_shadow_doc, payload)
+        
         _incoming_queue.append(payload)
 
-    def onDisconnect(self):
-        global _wamp_session
-        logging.info("WAMP Disconnected")
-        _wamp_session = None
-
 class WorkbenchIPC(protocol.Protocol):
-    """Handles raw TCP JSON messages from FreeCAD."""
+    def __init__(self):
+        self._buffer = b""
 
     def connectionMade(self):
-        self._buffer = b""
+        # logging.info("IPC Client Connected")
+        pass
 
     def dataReceived(self, data):
         self._buffer += data
-        logging.info(f"IPC Data Received: {len(data)} bytes | Total Buffer: {len(self._buffer)} bytes")
         try:
-            # Try to decode the buffer
             msg = json.loads(self._buffer.decode())
-            # If successful, we have a complete message (assuming 1 request per conn)
-            self._buffer = b"" # Reset
+            self._buffer = b"" # Reset buffer on success
             self.handle_request(msg)
         except json.JSONDecodeError:
-            # Incomplete data, wait for more
-            pass
+            pass # Incomplete data, wait for more
         except Exception as e:
             logging.error(f"IPC Error: {e}")
 
     def handle_request(self, req):
-        global _wamp_session, _ledger
+        global _shadow_doc
         cmd = req.get("command")
-        # logging.info(f"Processing Command: {cmd}")
+        payload = req.get("payload")
         
         if cmd == "mutation":
-            payload = req.get("payload", {})
             try:
                 # 1. Write to Local Ledger
                 mid = _ledger.append_mutation(
@@ -82,9 +123,13 @@ class WorkbenchIPC(protocol.Protocol):
                 )
                 logging.info(f"Local Mutation Recorded: {mid}")
                 
+                # 1.5 Replay on Shadow Document (Headless Recompute)
+                _replay_on_shadow(_shadow_doc, payload)
+
                 # 2. Broadcast via WAMP
                 if _wamp_session:
-                    from autobahn.twisted.wamp import PublishOptions
+                    # Correct import for PublishOptions
+                    from autobahn.wamp.types import PublishOptions
                     _wamp_session.publish("ocp.update.property", payload, options=PublishOptions(exclude_me=True))
                     logging.info(f"Broadcasted Mutation: {mid}")
                 else:
@@ -138,12 +183,11 @@ if __name__ == "__main__":
     from twisted.internet.error import ConnectionRefusedError
     
     def start_wamp():
+        print("DEBUG: start_wamp called", flush=True)
         runner = ApplicationRunner(url=WAMP_URL, realm=WAMP_REALM)
-        # We hook into the connect method to prevent reactor stop on fail?
-        # Actually, let's just use the runner normally but knowing it might fail.
-        # If it fails, we need to keep reactor running for IPC.
         d = runner.run(CollaborativeSession, start_reactor=False)
-        d.addErrback(lambda e: logging.warning(f"WAMP Connection Failed (Offline Mode): {e.value}"))
+        d.addCallback(lambda _: print("DEBUG: WAMP session finished", flush=True))
+        d.addErrback(lambda e: print(f"DEBUG: WAMP Error: {e}", flush=True))
 
     # Schedule WAMP start
     reactor.callWhenRunning(start_wamp)

@@ -53,13 +53,14 @@ development_status:
   2-1-encrypted-local-mutation-ledger-dml: done
   2-2-wamp-property-sync-dispatch: done
   2-3-divergence-detection-fail-to-read-only-gate: done
-  epic-2-retrospective: in-progress
+  epic-2-retrospective: skipped
 
   # Epic 3: Headless Recompute & Geometric Parity
-  epic-3: backlog
-  3-1-headless-recompute-service-sidecar: backlog
-  3-2-geometric-hash-validation-sha-256: backlog
+  epic-3: in-progress
+  3-1-headless-recompute-service-sidecar: done
+  3-2-geometric-hash-validation-sha-256: in-progress
   3-3-topological-naming-break-detection: backlog
+  epic-3-retrospective: optional
   epic-3-retrospective: optional
 
   # Epic 4: The Surgical Suite (Conflict Resolution)
