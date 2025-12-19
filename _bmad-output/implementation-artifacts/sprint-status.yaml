@@ -49,14 +49,14 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2: Distributed Mutation Sync & Ledger
-  epic-2: in-progress
+  epic-2: done
   2-1-encrypted-local-mutation-ledger-dml: done
   2-2-wamp-property-sync-dispatch: done
   2-3-divergence-detection-fail-to-read-only-gate: done
   epic-2-retrospective: skipped
 
   # Epic 3: Headless Recompute & Geometric Parity
-  epic-3: in-progress
+  epic-3: done
   3-1-headless-recompute-service-sidecar: done
   3-2-geometric-hash-validation-sha-256: done
   3-3-topological-naming-break-detection: done
@@ -64,9 +64,9 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4: The Surgical Suite (Conflict Resolution)
-  epic-4: backlog
-  4-1-surgical-suite-hud-webview2-transparent-overlay: backlog
-  4-2-3d-ghosting-mutation-scrubbing: backlog
+  epic-4: in-progress
+  4-1-surgical-suite-hud-qt-overlay: in-progress
+  4-2-3d-ghosting-mutation-scrubbing: in-progress
   4-3-interactive-geometric-handshake-accept-reject: backlog
   epic-4-retrospective: optional
 

@@ -9,7 +9,7 @@ REALM = "realm1"
 # Setting Length to 0 usually degenerates the shape
 FAKE_MUTATION = {
     "author": "GhostUser",
-    "object": "Pad",   
+    "object": "Box",   
     "property": "Length",
     "value": 0.0,    
     "geometric_hash": "dummy_hash" # We expect mismatch, but mainly checking TOPOLOGY log

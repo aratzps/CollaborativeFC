@@ -4,7 +4,9 @@ import json
 import logging
 from twisted.internet import reactor, protocol, endpoints
 from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
+from twisted.internet import task
 from ledger import LedgerManager
+import time
 
 # Configuration
 IPC_PORT = 5555
@@ -16,6 +18,7 @@ LEDGER_SECRET = "collaborative-fc-synergy-2025"
 _wamp_session = None
 _ledger = LedgerManager(secret_key=LEDGER_SECRET)
 _incoming_queue = []
+_peer_registry = {} # {session_id: {name, color, last_seen, ...}}
 
 # Initialize Headless FreeCAD Engine (Story 3.1)
 try:
@@ -81,10 +84,28 @@ def _replay_on_shadow(doc, payload):
                 
                 # Detect Clean vs Broken Topology
                 topo_status = "STABLE"
-                if pre_topology != "N/A" and post_topology != "N/A":
+                is_broken = False
+                
+                # 1. Check for FreeCAD Error flags
+                if hasattr(obj, "State") and "Error" in str(obj.State):
+                    topo_status = f"CRITICAL_ERROR ({obj.State})"
+                    is_broken = True
+                
+                # 2. Check for Null Shape (Lost Geometry)
+                if hasattr(obj, "Shape") and obj.Shape.isNull():
+                    topo_status = "NULL_SHAPE (Lost Geometry)"
+                    is_broken = True
+
+                # 3. Check Metric Stability
+                if not is_broken and pre_topology != "N/A" and post_topology != "N/A":
                     if pre_topology != post_topology:
                         topo_status = f"UNSTABLE ({pre_topology} -> {post_topology})"
-                        logging.warning(f"[TOPOLOGY BREAK] Shape Changed: {topo_status}")
+                        # Note: Change in face count isn't always a break, but it IS a topological shift
+                        # that warrants a 'Surgical' warning via the glint or hud.
+                
+                if is_broken:
+                     logging.error(f"[TOPO_BREAK] {obj_name} is broken: {topo_status}")
+                     # In a real app, we would emit a specific 'topo_break' event here
 
                 # Calculate Local Hash
                 local_hash = calculate_geometric_hash(obj)
@@ -97,7 +118,9 @@ def _replay_on_shadow(doc, payload):
                          logging.warning(f"[DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}")
                 
                  # Log both Hash Status and Topology Status
-                logging.info(f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | Hash={local_hash[:8]}... [{status}] | Topo={topo_status}")
+                msg = f"[Shadow] SUCCESS: {obj_name}.{prop_name} -> {val} | Hash={local_hash[:8]}... [{status}] | Topo={topo_status}"
+                print(msg, flush=True)
+                logging.info(msg)
                 
             except AttributeError:
                 pass # Ignore non-Box props
@@ -114,6 +137,34 @@ class CollaborativeSession(ApplicationSession):
         
         # Subscribe to remote mutations
         self.subscribe(self.on_remote_mutation, "ocp.update.property")
+        self.subscribe(self.on_heartbeat, "ocp.presence.heartbeat")
+        
+        # Start Heartbeat Loop (every 2 seconds)
+        self.hb_loop = task.LoopingCall(self.broadcast_heartbeat)
+        self.hb_loop.start(2.0)
+
+    def broadcast_heartbeat(self):
+        # We broadcast our minimal status
+        payload = {
+            "name": "LocalUser", # In real app, this comes from config
+            "color": "#A855F7", 
+            "status": "Online",
+            "timestamp": time.time()
+        }
+        self.publish("ocp.presence.heartbeat", payload)
+
+    def on_heartbeat(self, payload, details=None):
+        global _peer_registry
+        # details.publisher gives the session ID of the sender
+        sender_id = details.publisher if details else "unknown"
+        
+        _peer_registry[sender_id] = {
+            "id": sender_id,
+            "name": payload.get("name", "Unknown"),
+            "color": payload.get("color", "#999999"),
+            "status": payload.get("status", "Online"),
+            "last_seen": time.time()
+        }
 
     def on_remote_mutation(self, payload):
         global _incoming_queue, _shadow_doc
@@ -186,6 +237,18 @@ class WorkbenchIPC(protocol.Protocol):
             snapshot = list(_incoming_queue)
             _incoming_queue.clear()
             self.transport.write(json.dumps(snapshot).encode())
+
+        elif cmd == "get_peers":
+            # Filter stale peers (> 5 seconds ago)
+            now = time.time()
+            active_peers = []
+            for pid, pdata in list(_peer_registry.items()):
+                if now - pdata.get("last_seen", 0) < 5.0:
+                    active_peers.append(pdata)
+                else:
+                    # Optional: Prune
+                    pass
+            self.transport.write(json.dumps(active_peers).encode())
 
         if cmd == "ping":
             wamp_status = "connected" if _wamp_session else "offline"

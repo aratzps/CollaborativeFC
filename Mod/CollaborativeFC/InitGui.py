@@ -201,6 +201,107 @@ class CollaborativeFC_SimulatePeerEdit_Command:
     def IsActive(self):
         return True
 
+# Command to Toggle the Surgical HUD (Overlay)
+class CollaborativeFC_ToggleHUD_Command:
+    def GetResources(self):
+        return {
+            'MenuText': 'Show Conflict HUD',
+            'ToolTip': 'Toggle the Surgical Suite Overlay',
+            'Pixmap': 'Std_ViewDetail'
+        }
+
+    def on_hud_decision(self, decision):
+        try:
+            import GhostManager
+            gm = GhostManager.get_instance()
+            
+            # Context: We are acting on the Ghost's target
+            target_obj = None
+            if gm and gm.active_ghost:
+                # Ghost name is 'Ghost_Label', real obj name should be derived or stored
+                # For MVP, we assume the user selected the object before ghosting, 
+                # or we just grab the mock 'Box' for this demo.
+                # In a real impl, HUD would pass back the mutation ID.
+                doc = FreeCAD.ActiveDocument
+                target_obj = doc.getObject("Box") or doc.getObject("Pad")
+
+            if decision == "accept":
+                FreeCAD.Console.PrintMessage(f"[CollaborativeFC] HUD Decision: ACCEPT. Performing Geometric Handshake...\n")
+                if target_obj:
+                    # Apply the 'Proposed' value (Mock=80.0 from Activated below)
+                    target_obj.Length = 80.0 
+                    doc.recompute()
+                    
+                    # 1. Commit to Ledger (Confirming the resolution)
+                    import MutationObserver
+                    obs = getattr(FreeCAD, "CollaborativeFC_OBSERVER", None)
+                    if obs:
+                        payload = {
+                            "author": obs.manager.author_id, # Confirmed by us
+                            "object": target_obj.Name,
+                            "property": "Length",
+                            "value": "80.0",
+                            "status": "RESOLVED"
+                        }
+                        obs.manager.send_to_sidecar("mutation", payload)
+                        FreeCAD.Console.PrintMessage(f"[CollaborativeFC] Resolution committed to Ledger.\n")
+
+            elif decision == "reject":
+                FreeCAD.Console.PrintMessage(f"[CollaborativeFC] HUD Decision: REJECT. Reverting...\n")
+                # No action needed on target_obj, just cleanup ghost
+                
+            # Cleanup
+            if gm:
+                gm.remove_ghost()
+                
+        except Exception as e:
+            FreeCAD.Console.PrintError(f"[CollaborativeFC] HUD Decision Error: {e}\n")
+
+    def Activated(self):
+        try:
+            import GhostManager
+            gm = GhostManager.get_instance()
+        except:
+            gm = None
+
+        wb = FreeCADGui.activeWorkbench()
+        if not hasattr(wb, 'hud'):
+            # Lazy Load
+            try:
+                import SurgicalOverlay
+                mw = FreeCADGui.getMainWindow()
+                wb.hud = SurgicalOverlay.SurgicalOverlay(mw)
+                wb.hud.move(mw.width() // 2 - 200, 100)
+                # CONNECT SIGNAL
+                wb.hud.decision_made.connect(self.on_hud_decision)
+            except Exception as e:
+                FreeCAD.Console.PrintError(f"[CollaborativeFC] HUD Init Error: {e}\n")
+                return
+
+        if wb.hud.isVisible():
+            # HIDE logic (Manual Toggle)
+            wb.hud.hide()
+            if gm:
+                gm.remove_ghost()
+        else:
+            # SHOW
+            wb.hud.show()
+            wb.hud.raise_()
+            
+            # TRIGGER GHOST (Test Data)
+            # Find a Box to ghost
+            doc = FreeCAD.ActiveDocument
+            if doc:
+                box = doc.getObject("Box") or doc.getObject("Pad")
+                if box and gm:
+                    # Create a ghost with Length = 80 (Simulated Conflict)
+                    gm.create_ghost(box, "Length", 80.0)
+                else:
+                    FreeCAD.Console.PrintWarning("[CollaborativeFC] No 'Box' or 'Pad' found to ghost.\n")
+
+    def IsActive(self):
+        return True
+
 # Command to View the Encrypted Local Ledger
 class CollaborativeFC_ViewLedger_Command:
     def GetResources(self):
@@ -263,6 +364,7 @@ class CollaborativeFC_ViewLedger_Command:
 
 FreeCADGui.addCommand('CollaborativeFC_ToggleSidebar', CollaborativeFC_ToggleSidebar_Command())
 FreeCADGui.addCommand('CollaborativeFC_SimulatePeerEdit', CollaborativeFC_SimulatePeerEdit_Command())
+FreeCADGui.addCommand('CollaborativeFC_ToggleHUD', CollaborativeFC_ToggleHUD_Command())
 FreeCADGui.addCommand('CollaborativeFC_ShowVersionError', CollaborativeFC_ShowVersionError_Command())
 FreeCADGui.addCommand('CollaborativeFC_ViewLedger', CollaborativeFC_ViewLedger_Command())
 
@@ -296,8 +398,8 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
         FreeCAD.Console.PrintMessage("[CollaborativeFC] Workbench INITIALIZE Started\n")
         
         # Add toolbars and menus
-        self.appendToolbar("Collaborative Pulse", ["CollaborativeFC_ToggleSidebar", "CollaborativeFC_SimulatePeerEdit", "CollaborativeFC_ShowVersionError", "CollaborativeFC_ViewLedger"])
-        self.appendMenu("Collaborative", ["CollaborativeFC_ToggleSidebar", "CollaborativeFC_SimulatePeerEdit", "CollaborativeFC_ShowVersionError", "CollaborativeFC_ViewLedger"])
+        self.appendToolbar("Collaborative Pulse", ["CollaborativeFC_ToggleSidebar", "CollaborativeFC_SimulatePeerEdit", "CollaborativeFC_ToggleHUD", "CollaborativeFC_ShowVersionError", "CollaborativeFC_ViewLedger"])
+        self.appendMenu("Collaborative", ["CollaborativeFC_ToggleSidebar", "CollaborativeFC_SimulatePeerEdit", "CollaborativeFC_ToggleHUD", "CollaborativeFC_ShowVersionError", "CollaborativeFC_ViewLedger"])
         
         # Initialize the sidebar object early but keep it hidden
         if not self.sidebar:
@@ -366,6 +468,14 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
                 self.sync_timer.timeout.connect(self._poll_incoming_mutations)
                 self.sync_timer.start(500) # Poll every 500ms
 
+            # 7. Peer Presence Poll (Every 2s)
+            if not hasattr(self, 'presence_timer'):
+                try: from PySide6 import QtCore 
+                except: from PySide2 import QtCore
+                self.presence_timer = QtCore.QTimer()
+                self.presence_timer.timeout.connect(self._poll_peers)
+                self.presence_timer.start(2000)
+
             FreeCAD.Console.PrintMessage("[CollaborativeFC] >>> COLLABORATIVE SESSION READY <<<\n")
             
         except Exception as e:
@@ -388,6 +498,17 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
         except Exception as e:
             FreeCAD.Console.PrintError(f"[CollaborativeFC] Sync Error: {e}\n")
 
+    def _poll_peers(self):
+        """Polls the sidecar for active peer list and updates the Sidebar."""
+        try:
+            obs = getattr(FreeCAD, "CollaborativeFC_OBSERVER", None)
+            if obs:
+                peers = obs.manager.get_peers()
+                if peers is not None and self.sidebar:
+                    self.sidebar.update_peers(peers)
+        except Exception:
+            pass # Silent fail to avoid log spam
+
     def _apply_mutations(self, mutations):
         """Applies a batch of mutations to the FreeCAD document."""
         doc = FreeCAD.ActiveDocument
@@ -405,38 +526,51 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
                 
                 obj = doc.getObject(obj_name)
                 if obj:
+                    old_value = None
                     try:
+                        # Capture Old Value
+                        if hasattr(obj, prop_name):
+                             old_value = getattr(obj, prop_name)
+
                         # Log the attempt
                         FreeCAD.Console.PrintMessage(f"   [APPLY] {obj_name}.{prop_name} = {value}\n")
                         
                         # Apply the change
-                        # Capture Pre-Topology
                         pre_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
 
                         setattr(obj, prop_name, value)
                         
-                        # Recompute immediately to validate geometry
                         doc.recompute()
                         
-                        # Capture Post-Topology
                         post_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
                         
                         if pre_topo and post_topo and pre_topo != post_topo:
                              FreeCAD.Console.PrintWarning(f"   [WARNING] Topology Changed: {pre_topo} -> {post_topo}. References may break!\n")
                         
-                        # Divergence Check (Story 3.2: SHA256)
+                        # Divergence Check
                         incoming_hash = m.get("geometric_hash")
                         if incoming_hash and incoming_hash != "dummy_hash":
-                            # Calculate Local Hash (Same algo as Sidecar)
                             import hashlib
                             shape = obj.Shape
                             sig = f"{shape.Volume:.6f}|{shape.Area:.6f}|{len(shape.Vertexes)}|{len(shape.Edges)}|{len(shape.Faces)}"
                             local_hash = hashlib.sha256(sig.encode()).hexdigest()
                             
-                            # Real Validation
+                            # Validation
                             if incoming_hash == "FORCE_DIVERGENCE" or incoming_hash != local_hash:
                                 FreeCAD.Console.PrintError(f"   [DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}\n")
-                                self._trigger_safety_lock(f"Geometric Divergence Detected\nremote: {incoming_hash[:6]}...\nlocal: {local_hash[:6]}...")
+                                
+                                # CRITICAL: Revert to Safe State immediately
+                                if old_value is not None:
+                                    FreeCAD.Console.PrintMessage(f"   [REVERT] Restoring safe state: {old_value}\n")
+                                    setattr(obj, prop_name, old_value)
+                                    doc.recompute()
+                                
+                                self._trigger_safety_lock(
+                                    f"Geometric Divergence Detected\nremote: {incoming_hash[:6]}...\nlocal: {local_hash[:6]}...",
+                                    target_obj=obj,
+                                    prop_name=prop_name,
+                                    proposed_val=value
+                                )
                             else:
                                 FreeCAD.Console.PrintMessage(f"   [MATCH] Geometric Parity Confirmed ({local_hash[:6]}...)\n")
                             
@@ -450,13 +584,137 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
             # ALWAYS resume the observer
             if obs: obs.resume()
 
-    def _trigger_safety_lock(self, reason):
-        """Triggers the Read-Only Safety Lock."""
-        FreeCAD.Console.PrintError(f"[CollaborativeFC] SAFETY LOCK ENGAGED: {reason}\n")
+    # --- Workbench-Level Slots ---
+    def on_hud_decision(self, decision):
+        """Handle Accept/Reject signals from the HUD."""
+        try:
+            import GhostManager
+            gm = GhostManager.get_instance()
+            
+            # Context: We are acting on the Ghost's target
+            target_obj = None
+            if gm and gm.active_ghost:
+                doc = FreeCAD.ActiveDocument
+                # Try to find the original object from the ghost name "Ghost_Name"
+                # This is heuristic for the MVP
+                if hasattr(gm.active_ghost, "Name") and gm.active_ghost.Name.startswith("Ghost_"):
+                     orig_name = gm.active_ghost.Name.replace("Ghost_", "")
+                     target_obj = doc.getObject(orig_name)
+                
+                # Fallback for simulated test
+                if not target_obj:
+                    target_obj = doc.getObject("Box") or doc.getObject("Pad")
+
+            if decision == "accept":
+                FreeCAD.Console.PrintMessage(f"[CollaborativeFC] HUD Decision: ACCEPT. Performing Geometric Handshake...\n")
+                if target_obj:
+                    # In a real impl, we'd read this from the HUD card or the Ghost context
+                    # For MVP, we know the conflict was 80.0 (or we grab it from Ghost if we stored it?)
+                    # Getting it from Ghost is clean: Ghost.Length
+                    try:
+                        new_val = gm.active_ghost.Length.Value if hasattr(gm.active_ghost.Length, "Value") else 80.0
+                        target_obj.Length = new_val
+                    except:
+                        target_obj.Length = 80.0
+
+                    doc.recompute()
+                    
+                    # Commit to Ledger
+                    import MutationObserver
+                    obs = getattr(FreeCAD, "CollaborativeFC_OBSERVER", None)
+                    if obs:
+                        payload = {
+                            "author": obs.manager.author_id,
+                            "object": target_obj.Name,
+                            "property": "Length",
+                            "value": str(target_obj.Length.Value), # Actual
+                            "status": "RESOLVED"
+                        }
+                        obs.manager.send_to_sidecar("mutation", payload)
+                        FreeCAD.Console.PrintMessage(f"[CollaborativeFC] Resolution committed to Ledger.\n")
+
+            elif decision == "reject":
+                FreeCAD.Console.PrintMessage(f"[CollaborativeFC] HUD Decision: REJECT. Reverting...\n")
+                if target_obj:
+                     # 1. Ensure local state is Safe 
+                     # (It should be, due to Revert-on-Divergence. We assume current state IS the safe state).
+                     # Just force recompute to be sure.
+                     doc.recompute()
+                     
+                     # 2. Broadcast Counter-Mutation to Peer (Force them to LOCAL value)
+                     current_val = target_obj.Length.Value
+                     
+                     import MutationObserver
+                     obs = getattr(FreeCAD, "CollaborativeFC_OBSERVER", None)
+                     if obs:
+                        payload = {
+                            "author": obs.manager.author_id,
+                            "object": target_obj.Name,
+                            "property": "Length",
+                            "value": str(current_val),
+                            "status": "REJECTION_ENFORCED"
+                        }
+                        obs.manager.send_to_sidecar("mutation", payload)
+                        FreeCAD.Console.PrintMessage(f"[CollaborativeFC] Rejection broadcast (Val={current_val}) to network.\n")
+                
+            # Cleanup
+            if gm:
+                gm.remove_ghost()
+                
+            # Hide HUD
+            if self.sidebar and hasattr(self, 'hud'):
+                self.hud.hide()
+                
+        except Exception as e:
+            FreeCAD.Console.PrintError(f"[CollaborativeFC] Workbench HUD Decision Error: {e}\n")
+
+    def _trigger_safety_lock(self, reason, target_obj=None, prop_name=None, proposed_val=None):
+        """Triggers the Read-Only Safety Lock OR Surgical Suite."""
+        FreeCAD.Console.PrintError(f"[CollaborativeFC] SAFETY TRIGGERED: {reason}\n")
+        
+        # Check if this is a "Surgical" candidate
+        is_surgical = "Divergence" in reason or "Topo" in reason
+        
+        if is_surgical:
+             # Just show the HUD (UX Decision)
+             wb = FreeCADGui.activeWorkbench()
+             
+             # Lazy Load HUD if missing
+             if not hasattr(wb, 'hud'):
+                 try:
+                     import SurgicalOverlay
+                     mw = FreeCADGui.getMainWindow()
+                     wb.hud = SurgicalOverlay.SurgicalOverlay(mw)
+                     wb.hud.move(mw.width() // 2 - 200, 100)
+                     # Standardize: Connect to the Workbench's own handler
+                     wb.hud.decision_made.connect(self.on_hud_decision) 
+                 except Exception as e:
+                     FreeCAD.Console.PrintError(f"[CollaborativeFC] HUD Init Error: {e}\n")
+                     return
+
+             if hasattr(wb, 'hud'):
+                 # Ensure it is visible (force show, do not toggle)
+                 if not wb.hud.isVisible():
+                     wb.hud.show()
+                 wb.hud.raise_()
+                 
+                 # Create visual ghost
+                 if target_obj and proposed_val:
+                     try:
+                         import GhostManager
+                         gm = GhostManager.get_instance()
+                         # Pass the CORRECT property name!
+                         p_name = prop_name if prop_name else "Length"
+                         gm.create_ghost(target_obj, p_name, proposed_val)
+                     except Exception as e: 
+                         FreeCAD.Console.PrintError(f"Ghost Error: {e}\n")
+
+        # Standard Lock Logic
         import LockManager
         lm = LockManager.LockManager.get_instance()
-        lm.lock_workbench(reason) # Corrected Name
-        lm.show_overlay()
+        if not is_surgical:
+            lm.lock_workbench(reason) 
+            lm.show_overlay()
 
     def _monitor_version_lock(self):
         """Monitors the LockManager and triggers overlay if lock becomes active."""

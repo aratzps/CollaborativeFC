@@ -196,7 +196,8 @@ class PulseSidebar:
                 self._label_hidden = True
                 self.timer.stop()
 
-    def send_mock_peers(self):
+    def update_peers(self, peers_list):
+        """Updates the JS frontend with the provided list of peers."""
         # Access the window via the internal name to avoid auto-inspectors
         window = getattr(self, '_webview_window_internal', None)
         if not window:
@@ -204,26 +205,18 @@ class PulseSidebar:
         
         self.webview_ready = True
         
-        import Constants
-        local_build = Constants.get_freecad_build_id()
-
-        peers = [
-            {"id": "p1", "name": "Sarah", "status": "Editing BasePlate", "color": "#A855F7", "isOnline": True, 
-             "version": Constants.PROTOCOL_VERSION, "build": local_build},
-            {"id": "p2", "name": "Alex", "status": "Viewing Ledger", "color": "#10B981", "isOnline": True,
-             "version": "0.1.0", "build": local_build}, # SIMULATED MISMATCH
-            {"id": "p3", "name": "Leo", "status": "Offline", "color": "#3B82F6", "isOnline": False,
-             "version": Constants.PROTOCOL_VERSION, "build": local_build}
-        ]
-        
         try:
             import json
-            peers_json = json.dumps(peers)
+            peers_json = json.dumps(peers_list)
             # Evaluate JS to update the peer list in the frontend
             window.evaluate_js(f"window.updatePeers({peers_json})")
-            FreeCAD.Console.PrintMessage("[CollaborativeFC] Pulse Data Synced Successfully.\n")
+            # FreeCAD.Console.PrintMessage(f"[CollaborativeFC] Synced {len(peers_list)} peers.\n")
         except Exception as e:
             FreeCAD.Console.PrintError(f"[CollaborativeFC] Error updating peers: {e}\n")
+
+    def send_mock_peers(self):
+        # Legacy/Fallback
+        self.update_peers([])
 
     def setLocked(self, locked=True):
         """Disables interaction in the sidebar UI."""

@@ -2,13 +2,19 @@ Starting OCP Sidecar (Twisted/Autobahn)...
 IPC Listening on port 5555
 Initializing WAMP...
 Entering Main Loop...
-DEBUG: start_wamp called
-DEBUG: WAMP session finished
-DEBUG: onJoin called for realm realm1
-DEBUG: on_remote_mutation called for {'author': 'GhostUser', 'object': 'Pad', 'property': 'Length', 'value': 50.0, 'geometric_hash': 'FORCE_DIVERGENCE'}
-WARNING:root:[DIVERGENCE] Hash Mismatch! Remote: FORCE_DIVERGENCE vs Local: fe632161877ddc01f70e822df99b6e8cb0d938850f6fbcc4ff3a8700ac71d66b
-[Shadow] SUCCESS: Pad.Length -> 50.0 | Hash=fe632161... [DIVERGENCE]
-DEBUG: on_remote_mutation called for {'author': 'GhostUser', 'object': 'Pad', 'property': 'Length', 'value': 50.0, 'geometric_hash': 'fe632161877ddc01f70e822df99b6e8cb0d938850f6fbcc4ff3a8700ac71d66b'}
-[Shadow] SUCCESS: Pad.Length -> 50.0 | Hash=fe632161... [MATCH]
-DEBUG: on_remote_mutation called for {'author': 'GhostUser', 'object': 'Pad', 'property': 'Length', 'value': 50.0, 'geometric_hash': 'fe632161877ddc01f70e822df99b6e8cb0d938850f6fbcc4ff3a8700ac71d66b'}
-[Shadow] SUCCESS: Pad.Length -> 50.0 | Hash=fe632161... [MATCH]
+[Shadow] SUCCESS: Box.Length -> 10.0 | Hash=f4eeed7f... [MATCH] | Topo=STABLE
+[Shadow] SUCCESS: Box.Width -> 10.0 | Hash=f4eeed7f... [MATCH] | Topo=STABLE
+[Shadow] SUCCESS: Box.Height -> 10.0 | Hash=f4eeed7f... [MATCH] | Topo=STABLE
+ERROR:root:Shadow Replay Error (Shape): {'sclassname': 'class Base::TypeError', 'sErrMsg': "type must be 'Shape', not str", 'sfile': '', 'iline': 0, 'sfunction': '', 'swhat': "type must be 'Shape', not str", 'btranslatable': False, 'breported': False}
+ERROR:root:Shadow Replay Error (Shape): {'sclassname': 'class Base::TypeError', 'sErrMsg': "type must be 'Shape', not str", 'sfile': '', 'iline': 0, 'sfunction': '', 'swhat': "type must be 'Shape', not str", 'btranslatable': False, 'breported': False}
+[Shadow] SUCCESS: Box.Width -> 25.0 | Hash=cdf297eb... [MATCH] | Topo=STABLE
+WARNING:root:[DIVERGENCE] Hash Mismatch! Remote: FORCE_DIVERGENCE vs Local: 5e56dc8a6bc009d0c7e9714537bb22fdca793b521c6e98f8c9fe6073acd9a861
+[Shadow] SUCCESS: Box.Length -> 80.0 | Hash=5e56dc8a... [DIVERGENCE] | Topo=STABLE
+[Shadow] SUCCESS: Box.Length -> 10.0 | Hash=cdf297eb... [MATCH] | Topo=STABLE
+[Shadow] SUCCESS: Box.Width -> 25.0 | Hash=cdf297eb... [MATCH] | Topo=STABLE
+WARNING:root:[DIVERGENCE] Hash Mismatch! Remote: FORCE_DIVERGENCE vs Local: 5e56dc8a6bc009d0c7e9714537bb22fdca793b521c6e98f8c9fe6073acd9a861
+[Shadow] SUCCESS: Box.Length -> 80.0 | Hash=5e56dc8a... [DIVERGENCE] | Topo=STABLE
+[Shadow] SUCCESS: Box.Length -> 80.0 | Hash=5e56dc8a... [MATCH] | Topo=STABLE
+ERROR:root:Shadow Replay Error (Shape): {'sclassname': 'class Base::TypeError', 'sErrMsg': "type must be 'Shape', not str", 'sfile': '', 'iline': 0, 'sfunction': '', 'swhat': "type must be 'Shape', not str", 'btranslatable': False, 'breported': False}
+ERROR:root:Shadow Replay Error (Shape): {'sclassname': 'class Base::TypeError', 'sErrMsg': "type must be 'Shape', not str", 'sfile': '', 'iline': 0, 'sfunction': '', 'swhat': "type must be 'Shape', not str", 'btranslatable': False, 'breported': False}
+[Shadow] SUCCESS: Box.Length -> 80.0 | Hash=5e56dc8a... [MATCH] | Topo=STABLE
