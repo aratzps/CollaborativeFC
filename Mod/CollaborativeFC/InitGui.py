@@ -503,6 +503,23 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
         try:
             obs = getattr(FreeCAD, "CollaborativeFC_OBSERVER", None)
             if obs:
+                # 1. Status Check (Epic 5.1)
+                status = obs.manager.get_status()
+                if status:
+                    wamp_state = status.get("wamp", "unknown")
+                    buf_size = status.get("buffer_size", 0)
+                    
+                    if wamp_state == "offline":
+                        msg = f"Offline Synergy - Buffering Mutations ({buf_size})"
+                        try: FreeCADGui.getMainWindow().statusBar().showMessage(msg)
+                        except: pass
+                    elif wamp_state == "connected" and buf_size > 0:
+                        # Draining buffer
+                        msg = f"Synergy Online - Syncing Buffer ({buf_size})..."
+                        try: FreeCADGui.getMainWindow().statusBar().showMessage(msg)
+                        except: pass
+                    # else: Online and Idle (Don't spam status bar)
+
                 peers = obs.manager.get_peers()
                 if peers is not None and self.sidebar:
                     self.sidebar.update_peers(peers)
@@ -519,10 +536,24 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
         if obs: obs.pause()
         
         try:
+            seen_actions = set()
+            local_author = str(obs.manager.author_id).strip()
+            
             for m in mutations:
+                incoming_author = str(m.get("author", "unknown")).strip()
+                if incoming_author == local_author:
+                    # FreeCAD.Console.PrintMessage(f"   [FILTER] Ignoring echo from {incoming_author}\n")
+                    continue 
+
                 obj_name = m.get("object")
                 prop_name = m.get("property")
                 value = m.get("value")
+                
+                # Dedup check (Object, Prop, Value)
+                action_key = (obj_name, prop_name, str(value))
+                if action_key in seen_actions:
+                    continue
+                seen_actions.add(action_key)
                 
                 obj = doc.getObject(obj_name)
                 if obj:
@@ -536,52 +567,23 @@ class CollaborativeFCWorkbench(FreeCADGui.Workbench):
                         FreeCAD.Console.PrintMessage(f"   [APPLY] {obj_name}.{prop_name} = {value}\n")
                         
                         # Apply the change
-                        pre_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
-
                         setattr(obj, prop_name, value)
                         
-                        doc.recompute()
+                        # NO Explicit Recompute here to avoid "Recursive Recompute" in PartDesign
+                        # Trust FreeCAD to mark object 'touched' and recompute later.
                         
-                        post_topo = (len(obj.Shape.Faces), len(obj.Shape.Edges)) if hasattr(obj,"Shape") else None
-                        
-                        if pre_topo and post_topo and pre_topo != post_topo:
-                             FreeCAD.Console.PrintWarning(f"   [WARNING] Topology Changed: {pre_topo} -> {post_topo}. References may break!\n")
-                        
-                        # Divergence Check
-                        incoming_hash = m.get("geometric_hash")
-                        if incoming_hash and incoming_hash != "dummy_hash":
-                            import hashlib
-                            shape = obj.Shape
-                            sig = f"{shape.Volume:.6f}|{shape.Area:.6f}|{len(shape.Vertexes)}|{len(shape.Edges)}|{len(shape.Faces)}"
-                            local_hash = hashlib.sha256(sig.encode()).hexdigest()
-                            
-                            # Validation
-                            if incoming_hash == "FORCE_DIVERGENCE" or incoming_hash != local_hash:
-                                FreeCAD.Console.PrintError(f"   [DIVERGENCE] Hash Mismatch! Remote: {incoming_hash} vs Local: {local_hash}\n")
-                                
-                                # CRITICAL: Revert to Safe State immediately
-                                if old_value is not None:
-                                    FreeCAD.Console.PrintMessage(f"   [REVERT] Restoring safe state: {old_value}\n")
-                                    setattr(obj, prop_name, old_value)
-                                    doc.recompute()
-                                
-                                self._trigger_safety_lock(
-                                    f"Geometric Divergence Detected\nremote: {incoming_hash[:6]}...\nlocal: {local_hash[:6]}...",
-                                    target_obj=obj,
-                                    prop_name=prop_name,
-                                    proposed_val=value
-                                )
-                            else:
-                                FreeCAD.Console.PrintMessage(f"   [MATCH] Geometric Parity Confirmed ({local_hash[:6]}...)\n")
-                            
                     except Exception as e:
-                         FreeCAD.Console.PrintError(f"   [FAIL] {obj_name}.{prop_name}: {e}\n")
-                         
-        except Exception as e:
-            FreeCAD.Console.PrintError(f"[CollaborativeFC] Apply Error: {e}\n")
+                        FreeCAD.Console.PrintError(f"   [APPLY ERROR] {e}\n")
             
+            # Post-batch recompute?
+            # User reported 'Recursive calling' crash. Removing this is safer.
+            # FreeCAD GUI loop will handle dirty objects eventually.
+            # doc.recompute() 
+            
+
+        except Exception as e:
+             FreeCAD.Console.PrintError(f"Application Loop Error: {e}\n")
         finally:
-            # ALWAYS resume the observer
             if obs: obs.resume()
 
     # --- Workbench-Level Slots ---

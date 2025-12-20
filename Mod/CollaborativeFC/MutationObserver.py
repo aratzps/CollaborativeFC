@@ -115,6 +115,10 @@ class MutationObserver:
         """Retrieves the list of active peers from the Sidecar."""
         return self.send_to_sidecar("get_peers", {})
 
+    def get_status(self):
+        """Retrieves network status and offline buffer size."""
+        return self.send_to_sidecar("get_status", {})
+
 class DocumentObserver:
     """Proxy observer pinned to the App using standard FreeCAD Slot names."""
     def __init__(self, manager):

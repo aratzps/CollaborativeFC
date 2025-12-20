@@ -18,6 +18,7 @@ LEDGER_SECRET = "collaborative-fc-synergy-2025"
 _wamp_session = None
 _ledger = LedgerManager(secret_key=LEDGER_SECRET)
 _incoming_queue = []
+_offline_buffer = [] # Queue for outgoing mutations when offline
 _peer_registry = {} # {session_id: {name, color, last_seen, ...}}
 
 # Initialize Headless FreeCAD Engine (Story 3.1)
@@ -143,15 +144,48 @@ class CollaborativeSession(ApplicationSession):
         self.hb_loop = task.LoopingCall(self.broadcast_heartbeat)
         self.hb_loop.start(2.0)
 
+        # Flush Offline Buffer
+        global _offline_buffer
+        if _offline_buffer:
+            logging.info(f"WAMP Reconnected - Flushing {len(_offline_buffer)} buffered mutations...")
+            from autobahn.wamp.types import PublishOptions
+            for payload in _offline_buffer:
+                self.publish("ocp.update.property", payload, options=PublishOptions(exclude_me=True))
+            _offline_buffer.clear()
+
+    def onLeave(self, details):
+        global _wamp_session
+        logging.info("Left WAMP session: {}".format(details.reason))
+        if _wamp_session == self:
+            _wamp_session = None
+        
+        # Stop Heartbeat
+        if hasattr(self, 'hb_loop') and self.hb_loop.running:
+            self.hb_loop.stop()
+
+    def onDisconnect(self):
+        global _wamp_session
+        logging.info("WAMP Transport Disconnected")
+        if _wamp_session == self:
+            _wamp_session = None
+            
+        # Stop Heartbeat
+        if hasattr(self, 'hb_loop') and self.hb_loop.running:
+            self.hb_loop.stop()
+
     def broadcast_heartbeat(self):
         # We broadcast our minimal status
-        payload = {
-            "name": "LocalUser", # In real app, this comes from config
-            "color": "#A855F7", 
-            "status": "Online",
-            "timestamp": time.time()
-        }
-        self.publish("ocp.presence.heartbeat", payload)
+        try:
+            payload = {
+                "name": "LocalUser", # In real app, this comes from config
+                "color": "#A855F7", 
+                "status": "Online",
+                "timestamp": time.time()
+            }
+            self.publish("ocp.presence.heartbeat", payload)
+        except Exception:
+            # Swallow transport errors to avoid log spam if disconnect happens during loop
+            pass
 
     def on_heartbeat(self, payload, details=None):
         global _peer_registry
@@ -220,7 +254,9 @@ class WorkbenchIPC(protocol.Protocol):
                     _wamp_session.publish("ocp.update.property", payload, options=PublishOptions(exclude_me=True))
                     logging.info(f"Broadcasted Mutation: {mid}")
                 else:
-                    logging.warning("WAMP Offline - Sync Queued (Not implemented)")
+                    logging.warning(f"WAMP Offline - Buffered Mutation: {mid}")
+                    global _offline_buffer
+                    _offline_buffer.append(payload)
 
                 self.transport.write(json.dumps({"status": "ok", "id": mid}).encode())
             except Exception as e:
@@ -249,6 +285,14 @@ class WorkbenchIPC(protocol.Protocol):
                     # Optional: Prune
                     pass
             self.transport.write(json.dumps(active_peers).encode())
+
+        elif cmd == "get_status":
+            wamp_status = "connected" if _wamp_session else "offline"
+            status = {
+                "wamp": wamp_status,
+                "buffer_size": len(_offline_buffer)
+            }
+            self.transport.write(json.dumps(status).encode())
 
         if cmd == "ping":
             wamp_status = "connected" if _wamp_session else "offline"
@@ -282,9 +326,19 @@ if __name__ == "__main__":
     from twisted.internet.error import ConnectionRefusedError
     
     def start_wamp():
+        def on_disconnect(reason):
+            logging.warning(f"WAMP Disconnected: {reason}. Retrying in 5s...")
+            reactor.callLater(5.0, start_wamp)
+
+        logging.info(f"Connecting to WAMP router at {WAMP_URL}...")
         runner = ApplicationRunner(url=WAMP_URL, realm=WAMP_REALM)
         d = runner.run(CollaborativeSession, start_reactor=False)
-        d.addErrback(lambda e: logging.warning(f"WAMP Connection Failed (Offline Mode): {e.value}"))
+        
+        # If connection fails immediately, errback is called.
+        d.addErrback(lambda e: on_disconnect(e.value))
+        
+        # If session connects then disconnects later, callback is called.
+        d.addCallback(lambda _: on_disconnect("Session Logic Finished"))
 
     # Schedule WAMP start
     reactor.callWhenRunning(start_wamp)
